@@ -18,11 +18,11 @@ async function showCupcakeList() {
     });
     for(let cupcake of res.data.cupcakes){
         let newCupcake = $(createCupcakeLi(cupcake));
-        $("#cupcake_list").append(newCupcake);
+        $(".cupcake_list").append(newCupcake);
     }
 }
 
-$("#new-cupcake-form").on("submit", async function (evt) {
+$(".new-cupcake-form").on("submit", async function (evt) {
     evt.preventDefault();
 
     let flavor = $('#flavor').val();
@@ -30,7 +30,7 @@ $("#new-cupcake-form").on("submit", async function (evt) {
     let size = $("#size").val();
     let image = $("#image").val();
 
-    const newCupcakeRes = await axios.post(`${BASE_URL}/cupcakes`,data,{
+    const newCupcakeRes = await axios.post(`${BASE_URL}/cupcakes`, {
         flavor,
         rating,
         size,
@@ -38,11 +38,11 @@ $("#new-cupcake-form").on("submit", async function (evt) {
       });
 
     let newCupcake = (createCupcakeLi(newCupcakeRes.data.cupcake));
-    $("cupcake_list").append(newCupcake);
-    $("#new-cupcake-form").trigger("reset");
+    $(".cupcake_list").append(newCupcake);
+    $(".new-cupcake-form").trigger("reset");
 })
 
-$('#cupcake_list').on('click', '.delete-cupcake', async function(evt){
+$('.cupcake_list').on('click', '.delete-cupcake', async function(evt){
     evt.preventDefault();
     let $cupcake=$(evt.target).closest('li');
     let cupcakeId=$cupcake.attr('data-id');
