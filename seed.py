@@ -4,7 +4,7 @@ from models import db, Cupcake
 
 db.drop_all()
 db.create_all()
-
+db.session.rollback()
 c1 = Cupcake(
     flavor="cherry",
     size="large",

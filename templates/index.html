@@ -9,9 +9,11 @@
 <body>
     <h1>All Available Cupcakes:</h1>
     <ul class="cupcake_list">
-         {% for cupcake in cupcakes %}
+         <!-- {% for cupcake in cupcakes %}
         <li data-id="{{cupcake.id}}">{{cupcake.flavor}}</li>
-        {% endfor %}
+        <img src="{{cupcake.image}}">
+        <button class="remove_btn">Remove</button>
+        {% endfor %} -->
     </ul>
     <form class="new-cupcake-form">
         Flavor:<input type="text" id="flavor">

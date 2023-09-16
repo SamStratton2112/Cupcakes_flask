@@ -1,26 +1,22 @@
-const BASE_URL = "http://localhost:5000/api"
+const BASE_URL = "http://127.0.0.1:5000/api"
 
 
-function createCupcakeLi(cupcake){
+function createCupcakeLi(newCupcakeRes){
     return `
-    <li data-id="${cupcake.id}">${cupcake.flavor}, ${cupcake.size}, ${cupcake.rating}
+    <li data-id="${newCupcakeRes.id}">${newCupcakeRes.flavor}, ${newCupcakeRes.size}, ${newCupcakeRes.rating}
     <button class="delete-cupcake">Remove</button>
     <li>
-    <img class="cupcake-image" src="${cupcake.image}" alt="no cupcake image">
+    <img class="cupcake-image" src="${newCupcakeRes.image}" alt="no cupcake image">
     `;
 }
 
 async function showCupcakeList() {
-    const res = await axios.get(`${BASE_URL}/cupcakes`,{
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
+    const res = await axios.get(`${BASE_URL}/cupcakes`);
     for(let cupcake of res.data.cupcakes){
         let newCupcake = $(createCupcakeLi(cupcake));
         $(".cupcake_list").append(newCupcake);
-    }
-}
+}}
+
 
 $(".new-cupcake-form").on("submit", async function (evt) {
     evt.preventDefault();
@@ -29,24 +25,42 @@ $(".new-cupcake-form").on("submit", async function (evt) {
     let rating = $("#rating").val();
     let size = $("#size").val();
     let image = $("#image").val();
+    let id = $(this).data('id')
 
     const newCupcakeRes = await axios.post(`${BASE_URL}/cupcakes`, {
         flavor,
         rating,
         size,
-        image
+        image,
+        id
       });
 
-    let newCupcake = (createCupcakeLi(newCupcakeRes.data.cupcake));
+    let newCupcake = newCupcakeRes.data.cupcake;
     $(".cupcake_list").append(newCupcake);
     $(".new-cupcake-form").trigger("reset");
 })
+
+// (createCupcakeLi(newCupcakeRes.data.cupcake))
 
 $('.cupcake_list').on('click', '.delete-cupcake', async function(evt){
     evt.preventDefault();
     let $cupcake=$(evt.target).closest('li');
     let cupcakeId=$cupcake.attr('data-id');
-    await axios.delete(`${BASE_URL}/cupcakes/${cupcakeId}`);
+    await axios.delete(`${BASE_URL}/cupcakes/${cupcakeId}`,{mode:'cors'});
 })
 
 $(showCupcakeList)
+
+async function deleteCupcake() {
+    const id = $(this).data('id')
+    await axios.delete(`${BASE_URL}/cupcakes/${id}`)
+    $(this).parent().remove()
+    // evt.preventDefault();
+    // let $cupcake = $(evt.target).closest("li");
+    // let cupcakeId = $cupcake.attr("data-id");
+  
+    // await axios.delete(`${BASE_URL}/cupcakes/${cupcakeId}`);
+    // $cupcake.parent().remove();
+  };
+
+  $('.delete-cupcake').click(deleteCupcake)

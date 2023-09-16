@@ -1,8 +1,9 @@
 """Flask app for Cupcakes"""
 
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect
 
 from models import db, connect_db, Cupcake
+from flask_cors import CORS
 
 app = Flask(__name__)
 
@@ -10,6 +11,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///cupcakes'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = "secret"
 app.app_context().push()
+CORS(app)
+
+
 
 connect_db(app)
 
